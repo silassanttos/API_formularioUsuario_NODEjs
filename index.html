@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Pessoa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* height: 100vh; */
+            padding: 20px;
+            overflow-x: hidden; 
+        }
+
+        /* Container principal */
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #4CAF50;
+            /* margin-bottom: 15px; */
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Estilização do formulário */
+        form {
+            display: flex;
+            flex-direction: column;
+            /*gap: 10px; */
+        }
+
+        label {
+            font-size: 1rem;
+            text-align: left;
+            margin-bottom: 5px;
+            color: #666;
+        }
+
+        input {
+            padding: 2px;
+            font-size: 0.9rem; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 1rem; 
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilização da tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: auto; 
+        }
+
+        th, td {
+            padding: 8px; 
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Div para controlar a rolagem da tabela */
+        .tabela-container {
+            max-height: 300px; 
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px; 
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            input, button {
+                font-size: 0.9rem; 
+            }
+
+            table {
+                font-size: 0.8rem; 
+                width: 100%;
+            }
+
+            th, td {
+                padding: 6px; 
+            }
+        }
+
+        /* Ajuste adicional para telas pequenas */
+        @media (max-width: 400px) {
+            .container {
+                max-width: 100%;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            input, button {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h1>Cadastro de Pessoa</h1>
+    
+    <form id="formCadastro" onsubmit="salvarPessoa(event)">
+        <input type="hidden" id="id" value=""> <!-- Campo oculto para ID, usado na edição -->
+        
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" required><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br>
+        
+        <label for="idade">Idade:</label>
+        <input type="number" id="idade" required><br>
+        
+        <button type="submit">Salvar</button>
+    </form>
+
+    <h2>Lista de Pessoas</h2>
+        <div class="tabela-container">
+            <table id="tabelaPessoas">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Idade</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- linhas inseridas dinamicamente aqui -->
+                </tbody>
+            </table>
+        </div>
+</div>
+    <script>
+        const apiUrl = 'http://localhost:3000/pessoas'; // URL da API
+
+        // Função para salvar ou atualizar uma pessoa
+        async function salvarPessoa(event) {
+            event.preventDefault(); 
+
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const idade = document.getElementById("idade").value.trim();
+
+            if (!nome || !email || !idade) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            const pessoa = { nome, email, idade };
+
+            const id = document.getElementById("id").value.trim(); 
+
+            let response;
+
+            // Se houver ID, faz uma atualização (PUT), caso contrário, cria uma nova pessoa (POST)
+            if (id) {
+                console.log("Atualizando pessoa com ID:", id);
+                response = await fetch(`${apiUrl}/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(pessoa), 
+                });
+            } else {
+                console.log("Criando nova pessoa...");
+                response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(pessoa), 
+                });
+            }
+
+            // Verifica a resposta do servidor
+            if (response.ok) {
+                alert('Pessoa salva com sucesso!');
+                listarPessoas(); 
+                limparFormulario(); 
+            } else {
+                alert('Erro ao salvar pessoa!');
+            }
+        }
+
+               // Função para listar as pessoas
+               async function listarPessoas() {
+        try {
+            const response = await fetch(apiUrl);
+            const pessoas = await response.json(); 
+            console.log(pessoas); 
+            
+            // Verifique se `pessoas` é um array e se não está vazio
+            if (Array.isArray(pessoas) && pessoas.length > 0) {
+                console.log("Entrando no loop de pessoas"); 
+
+                const tabela = document.getElementById("tabelaPessoas").getElementsByTagName("tbody")[0];
+                tabela.innerHTML = ''; // Limpa a tabela antes de exibir novamente
+
+                // Adiciona cada pessoa na tabela
+                pessoas.forEach(pessoa => {
+
+                    // Acesse as propriedades com letras maiúsculas
+                    const nome = pessoa.NOME || "Nome não disponível";
+                    const email = pessoa.EMAIL || "Email não disponível";
+                    const idade = pessoa.IDADE || "Idade não disponível";
+
+                    const row = tabela.insertRow();
+                    row.innerHTML = `
+                        <td>${nome}</td>
+                        <td>${email}</td>
+                        <td>${idade}</td>
+                        <td>
+                            <button class="edit" onclick="editarPessoa(${pessoa.ID})">Editar</button>
+                            <button class="delete" onclick="deletarPessoa(${pessoa.ID})">Deletar</button>
+                        </td>
+                    `;
+                });
+            } else {
+                console.error("A resposta não é um array válido ou está vazio:", pessoas);
+            }
+        } catch (error) {
+            console.error("Erro ao listar pessoas:", error);
+        }
+    }
+        // Função para deletar uma pessoa
+        async function deletarPessoa(id) {
+            if (confirm("Tem certeza que deseja excluir esta pessoa?")) {
+                try {
+                    const response = await fetch(`${apiUrl}/${id}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        alert("Pessoa deletada com sucesso!");
+                        listarPessoas(); // Atualiza a lista
+                    } else {
+                        alert("Erro ao deletar pessoa.");
+                    }
+                } catch (error) {
+                    console.error("Erro ao deletar pessoa:", error);
+                    alert("Erro ao deletar pessoa.");
+                }
+            }
+        }
+
+// Função para editar uma pessoa
+async function editarPessoa(id) {
+    console.log(`Buscando pessoa com ID: ${id}`); 
+    try {
+        const response = await fetch(`${apiUrl}/${id}`);
+        
+        if (!response.ok) {
+            const errorMessage = await response.json();
+            console.log(errorMessage);
+            alert("Pessoa não encontrada!");
+            return;
+        }
+
+        const pessoa = await response.json();
+        console.log(pessoa); 
+
+        document.getElementById("id").value = pessoa.ID;
+        document.getElementById("nome").value = pessoa.NOME;
+        document.getElementById("email").value = pessoa.EMAIL;
+        document.getElementById("idade").value = pessoa.IDADE;
+    } catch (error) {
+        console.error("Erro ao buscar pessoa:", error);
+        alert("Erro ao buscar pessoa.");
+    }
+}
+
+
+
+        // Função para limpar o formulário
+        function limparFormulario() {
+            document.getElementById("formCadastro").reset();
+            document.getElementById("id").value = ""; 
+        }
+
+        window.onload = listarPessoas;
+    </script>
+</body>
+</html>
