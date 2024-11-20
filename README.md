@@ -2,15 +2,13 @@
 
 ## Descrição
 
-O **Cadastro de Pessoa** é um sistema simples e funcional, desenvolvido com **Node.js** e **Express** para gerenciamento de informações de pessoas. O sistema permite realizar operações CRUD (Criar, Ler, Atualizar, Deletar) em uma tabela de pessoas, com um frontend responsivo em **HTML** e **CSS**. 
-
-Este projeto tem como objetivo fornecer uma interface intuitiva para o cadastro e gerenciamento de pessoas, integrando um servidor backend com **SQL Server** para persistência de dados.
+O **Cadastro de Pessoa** é um sistema simples, desenvolvido com **Node.js** e **Express** para gerenciamento de informações de pessoas. O sistema permite realizar operações CRUD (Criar, Ler, Atualizar, Deletar) em uma tabela de pessoas, com um frontend em **HTML** e **CSS**. 
 
 ## Tecnologias Utilizadas
 
 - **Frontend:**
   - HTML
-  - CSS (estilos responsivos)
+  - CSS
   - JavaScript (para interação com a API)
   
 - **Backend:**
