@@ -50,5 +50,6 @@ Isso indica que o servidor está em funcionamento.
 ### 1. Clonar o Repositório
 
 ```bash
-git clone https://github.com/usuario/cadastro-de-pessoa.git
-cd cadastro-de-pessoa
+git clone https://github.com/usuario/API_formularioUsuario_NODEjs.git
+cd API_formularioUsuario_NODEjs
+
