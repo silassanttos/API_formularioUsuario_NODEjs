@@ -35,10 +35,6 @@ Este projeto tem como objetivo fornecer uma interface intuitiva para o cadastro 
 ![image](https://github.com/user-attachments/assets/a954ea9c-2b4f-4d57-a66c-f1a4a516ecdb)
 ![image](https://github.com/user-attachments/assets/7ac075f3-c079-4926-a48d-713a4a765a6a)
 
-
-
-*Adicione aqui imagens e capturas de tela que mostram o funcionamento da aplicação.*
-
 ## Pré-requisitos
 
 Antes de rodar o projeto, é necessário ter instalado:
