@@ -43,6 +43,9 @@ Antes de rodar o projeto, é necessário ter instalado:
 - **SQL Server** (ou qualquer banco de dados SQL Server configurado)
 
 ## Como Rodar o Projeto
+node server.js
+Você verá uma mensagem similar a: "Servidor rodando na porta 3000"
+Isso indica que o servidor está em funcionamento.
 
 ### 1. Clonar o Repositório
 
