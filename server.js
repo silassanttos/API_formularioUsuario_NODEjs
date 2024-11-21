@@ -33,6 +33,7 @@ app.get("/pessoas", async (req, res) => {
     }
 });
 
+// Rota para obter uma pessoas por ID
 app.get("/pessoas/:id", async (req, res) => {
     const { id } = req.params;
     console.log(`Buscando pessoa com id: ${id}`);
